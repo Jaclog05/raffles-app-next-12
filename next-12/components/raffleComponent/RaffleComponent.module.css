@@ -1,0 +1,96 @@
+.first-color { 
+	background: #222831; 
+}
+	
+.second-color { 
+	background: #2d4059; 
+}
+
+.third-color { 
+	background: #ff5722; 
+}
+
+.fourth-color { 
+	background: #eeeeee; 
+}
+
+
+
+.container {
+    background: #222831;
+    border-radius: 1rem;
+    text-align: center;
+    display: grid;
+    grid-template-rows: 4fr 1fr;
+    height: 50vh;
+    min-width: 20vw;
+}
+
+.container .upper {
+    border-radius: 1rem 1rem 0 0;
+    position: relative;
+    width: 100%;
+}
+
+.upper > h4 {
+    position: absolute;
+    background: #ff5722;
+    color: #eeeeee;
+    border-radius: 0.3rem;
+    padding: 0.5rem 1rem;
+    left: 1.5rem;
+    top: -0.7rem
+}
+
+.upper > button {
+    position: absolute;
+    padding: 0.5rem 0.8rem;
+    border-radius: 0 0.8rem 0 0;
+    right: 0;
+    border: none;
+    background: none;
+    color: #eeeeee;
+}
+
+.upper > button:hover{
+    cursor: pointer;
+    background-color: #ff5722;
+    color: #eeeeee;
+}
+
+.upper > img {
+    height: calc(50vh * 0.7);
+    margin: 2.1rem 0.5rem 0 0.5rem;
+}
+
+.bottom {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: 1.2rem;
+    color: #eeeeee;
+}
+
+.bottom .price {
+    position: absolute;
+    right: 1.2rem;
+    background-color: #ff5722;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    top: -1.2rem;
+    color: #eeeeee;
+}
+
+.price > span {
+    font-size: 0.7rem;
+}
+
+.playing {
+    color: #adff2f
+}
+
+.finished {
+    color: #dc2727
+}

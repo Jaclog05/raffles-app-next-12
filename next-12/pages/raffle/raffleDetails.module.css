@@ -1,0 +1,96 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #2d4059;
+    height: 100vh;
+    min-width: 100vw;
+}
+
+.raffleNotFound{
+    background-color: #2d4059;
+    height: 100vh;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #eeeeee
+}
+
+.left {
+    grid-area: left;
+    display: flex;
+    position: relative;
+    align-items: center;
+    width: 33vw;
+}
+
+.left img {
+    margin: 0 auto;
+    border-radius: 0.5rem;
+    width: 30vw;
+    max-height: 60vh;
+    object-fit: contain;
+}
+
+.right_up {
+    grid-area: rightUp;
+    background-color: #2d4059;
+    color: #eeeeee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border-radius: 1rem;
+    border: 1px solid white;
+}
+
+.right_bottom {
+    grid-area: rightBottom;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: #eeeeee;
+    height: 100%;
+}
+
+.container {
+    grid-template-areas: "left rightUp"
+                         "left rightBottom";
+    height: 65vh;
+    gap: 0.5rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    background-color: #222831;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.left h2:first-child {
+    position: absolute;
+    background-color: #ff5722;
+    color: #eeeeee;
+    padding: 0.5rem 1rem;
+    top: -3rem;
+    left: 2rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.right_bottom > button {
+    background-color: #ff5722;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    color: #eeeeee;
+}
+
+.right_bottom > button:hover{
+    cursor: pointer;
+    opacity: 0.8;
+}

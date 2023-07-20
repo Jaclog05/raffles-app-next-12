@@ -1,0 +1,24 @@
+.rafflesWrapper{
+  background-color: #2d4059;
+  height: max-content;
+  padding: 30vh 5vw;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  gap: 2vw
+}
+
+.noRafflesCreated{
+  background-color: #2d4059;
+  height: 100vh;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #eeeeee
+}
+
+.rafflesWrapper > a:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
