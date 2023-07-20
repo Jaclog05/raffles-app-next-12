@@ -9,7 +9,7 @@ export default function NavBar() {
       <ul>
         <Link href='#'><li>Jaider</li></Link>
         <Link href='/createRaffle'><li>Nueva Rifa</li></Link>
-        <Link href='/login'><li>Ingresar</li></Link>
+        <a href="/api/auth/login">Login</a>
       </ul>
     </header>
   )
