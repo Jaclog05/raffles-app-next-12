@@ -37,12 +37,13 @@
     justify-content: space-evenly;
 }
 
-.container ul li {
+.container ul li, .login{
     list-style-type: none;
     padding: 1rem;
+    margin-right: 0.5rem;
 }
 
-.container ul li:hover {
+.container ul li:hover, .container ul a:hover {
     background-color: #ff5722;
     color: #eeeeee;
     cursor: pointer;
