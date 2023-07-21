@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './RaffleComponent.module.css'
 import deleteCloud from './deleteCloud'
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 export default function Raffle({id, img, numTickets, prize, price, handleClosing, dateInfo}) {
 
@@ -16,12 +17,14 @@ export default function Raffle({id, img, numTickets, prize, price, handleClosing
     return match ? match[1] : null;
   };
 
+  const { user } = useUser();
+
 
   return (
     <div className={styles.container}>
       <div className={styles.upper}>
         <h4>{prize}</h4>
-        <button onClick={handleClick}> ✖ </button>
+        { user &&<button onClick={handleClick}> ✖ </button> }
         <img src={img} alt='prize'/>
       </div>
       <div className={styles.bottom}>
