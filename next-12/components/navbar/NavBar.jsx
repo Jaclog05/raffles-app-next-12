@@ -1,25 +1,25 @@
 import React from 'react'
 import Link from 'next/link'
 import styles from './NavBar.module.css'
-import { useUser } from '@auth0/nextjs-auth0/client';
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function NavBar() {
 
-  const { user } = useUser();
+  const { data: session } = useSession()
 
   return (
     <header className={styles.container}>
       <Link href='/'><div>Raffles App</div></Link>
       {
-        user ? 
+        session ?
         <ul>
-            <Link href='#'><li>{user.nickname}</li></Link>
+            <Link href='#'><li>{session.user.email}</li></Link>
             <Link href='/createRaffle'><li>Nueva Rifa</li></Link>
-            <a className={styles.login} href="/api/auth/logout">Cerrar Sesion</a>
+            <button onClick={() => signOut()}>Sign out</button>
         </ul>
         :
         <ul>
-            <a className={styles.login} href="/api/auth/login">Ingresar</a>
+            <button onClick={() => signIn()}>Sign in</button>
         </ul>
       }
     </header>
