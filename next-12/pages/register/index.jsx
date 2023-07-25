@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import styles from './register.module.css'
-import Link from 'next/link'
 import { initialState_user } from './initialState_user'
 import axios from 'axios'
 
@@ -73,7 +72,7 @@ export default function Register() {
                 </label>
             </div>
             <input type="submit" value="Registrarse"/>
-            <p>¿Ya tiene cuenta? Ingrese <a href='/api/auth/login'>aquí</a></p>
+            <p>¿Ya tiene cuenta? Ingrese <a href='/login'>aquí</a></p>
         </form>
     </div>
   )
