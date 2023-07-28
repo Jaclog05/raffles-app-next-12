@@ -1,7 +1,7 @@
 const controllers = {}
 const Raffle = require('../models/Raffle')
 const User = require('../models/User')
-const jwt = require('jsonwebtoken')
+const {sign, verify} = require('jsonwebtoken')
 const {serialize} = require('cookie')
 
 controllers.getRaffles = async (req, res) => {
@@ -12,6 +12,16 @@ controllers.getRaffles = async (req, res) => {
 controllers.getUsers = async (req, res) => {
     const users = await User.find()
     res.json(users)
+}
+
+controllers.getProfileInfo = (req, res) => {
+    const {token} = req.cookies
+    try {
+        const user = verify(token, 'secret')
+        return res.json({email: user.email, username: user.username})
+    } catch (error) {
+        return res.json(200).json({"error": "Token invalido"})
+    }
 }
 
 controllers.createRaffle = async (req, res) => {
@@ -31,27 +41,57 @@ controllers.createUser = async (req, res) => {
 controllers.loginUser = async (req, res) => {
     const {email, password} = req.body
     const validUser = await User.findOne({email, password})
+
     if(validUser){
 
-        const token = jwt.sign({
-            exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 1 day expiration
-            email: validUser.email,
-            username: validUser.name
-        }, 'secret')
+            const token = sign(
+                {
+                exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
+                email: validUser.email,
+                username: validUser.name
+            },
+            "secret"
+            )
 
-        const serialized = serialize('myTokenName', token, {
+        const serialized = serialize("token", token, 
+        {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
-            path: '/'
-        })
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 1000 * 60 * 60 * 24 *30,
+            path: "/"
+        } 
+        )
 
-        res.setHeader('Set-Cookie', serialized)
-        res.json({"message": "Registrado correctamente"})
-    }else{
-        res.json({"error": "Credenciales incorrectas"})
+        res.setHeader("Set-Cookie", serialized)
+        return res.status(200).json({
+            "message": "Logueado correctamente"
+        })
     }
+    
+    return res.status(200).json({"error": "Credenciales incorrectas"})
+}
+
+controllers.logoutUser = async (req, res) => {
+
+    const { token } = req.cookies;
+    
+        if (!token) {
+            return res.status(401).json({ error: "Not logged in" });
+        }
+
+        const serialized = serialize("token", null, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 0,
+            path: "/",
+        });
+
+        res.setHeader("Set-Cookie", serialized);
+        return res.status(200).json({
+            message: "Logout successful",
+        });
 }
 
 controllers.getRaffleById = async (req, res) => {
