@@ -3,10 +3,14 @@ import styles from './login.module.css'
 import { initialState_login } from '../login/initialState_login'
 import Link from 'next/link'
 import axios from 'axios'
+import { useRouter } from "next/router";
 
-export default function Login() {
+export default function Login({changeStatus}) {
 
   const [userInfo, setUserInfo] = useState(initialState_login)
+  const [error, setError] = useState("")
+
+  const router = useRouter();
 
     const handleChange = (e) => {
         const {value, name} = e.target
@@ -20,11 +24,15 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
       e.preventDefault()
-      console.log(userInfo)
-      const response = await axios.post("http://localhost:4000/login", userInfo)
-          /* .then(response => response.data)
-          .catch(err => console.log(err)) */
-      console.log(response)
+      const response = await axios.post("http://localhost:4000/login", userInfo, {
+        withCredentials: true
+      })
+      if(response.data.hasOwnProperty('message')){
+        changeStatus()
+        router.push('/dashboard')
+      }else{
+        setError(response.data.error)
+      }
       setUserInfo(initialState_login)
     }
 
@@ -32,6 +40,9 @@ export default function Login() {
     <div className={styles.container}>
         <form onSubmit={handleSubmit}>
             <h3>Ingreso</h3>
+            {
+              error && <h5>{error}</h5>
+            }
             <label>
                 Ingrese su correo electrónico
                 <input onChange={handleChange} value={userInfo.email} name='email' type='email'/>

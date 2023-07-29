@@ -43,7 +43,14 @@
     margin-right: 0.5rem;
 }
 
-.container ul li:hover, .container ul a:hover {
+.logoutButton{
+    list-style-type: none;
+    padding: 1rem;
+    margin-right: 0.5rem;
+    border: none;
+}
+
+.container ul li:hover, .container ul button:hover, .login:hover {
     background-color: #ff5722;
     color: #eeeeee;
     cursor: pointer;
