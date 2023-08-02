@@ -9,7 +9,8 @@ const {
     deleteRaffle,
     deleteUser,
     getProfileInfo,
-    logoutUser
+    logoutUser,
+    createSession
 } =  require('../controllers/index.controllers')
 
 const router = Router()
@@ -20,6 +21,7 @@ router.get('/profile', getProfileInfo)
 router.post('/create', createRaffle)
 router.post('/register', createUser)
 router.post('/login', loginUser)
+router.post('/payment', createSession)
 router.get('/logout', logoutUser)
 router.get('/raffle/:id', getRaffleById)
 router.delete('/raffle/:_id', deleteRaffle)

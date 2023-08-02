@@ -3,6 +3,14 @@ const Raffle = require('../models/Raffle')
 const User = require('../models/User')
 const {sign, verify} = require('jsonwebtoken')
 const {serialize} = require('cookie')
+const Stripe = require("stripe");
+require('dotenv').config()
+
+const {
+  STRIPE_SECRET_KEY
+} = process.env
+
+const stripe = new Stripe(STRIPE_SECRET_KEY);
 
 controllers.getRaffles = async (req, res) => {
     const raffles = await Raffle.find()
@@ -37,6 +45,22 @@ controllers.createUser = async (req, res) => {
     await newUser.save()
     res.json(newUser)
 }
+
+controllers.createSession = async (req, res) => {
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: req.body,
+      mode: "payment",
+      success_url: "http://localhost:3000/",
+      cancel_url: "http://localhost:3000/login",
+    });
+
+    return res.json({ url: session.url });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 controllers.loginUser = async (req, res) => {
     const {email, password} = req.body
