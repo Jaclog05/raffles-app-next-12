@@ -1,14 +1,16 @@
 import styles from './Board.module.css'
 
-export default function Board({toggle, board}) {
+export default function Board({toggle, numbers}) {
 
   return (
     <div className={styles.wrapper}>
         {
-            board.map((number, idx) => (
+            numbers.map((number, idx) => (
                 <p 
                   key={number.value}
-                  onClick={() => toggle(idx)}
+                  onClick={() => {
+                    toggle(number, idx)
+                  }}
                   className={number.picked ? styles.picked : styles.noPicked}
                 >
                   {number.value}

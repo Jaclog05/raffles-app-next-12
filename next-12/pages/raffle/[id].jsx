@@ -18,9 +18,36 @@ export default function RaffleDetails() {
 
   const [raffle, setRaffle] = useState([])
   const [boardState, setBoardState] = useState([])
+  const [numbers, setNumbers] = useState([])
 
-  const toggle = (index) => {
-    setBoardState((prevItems) => {
+  const toggle = (numberObj, index) => {
+    let isAlreadyOnBoardState = false
+
+    for(let i = 0; i < boardState.length; i++){
+      if(boardState[i].price_data.product_data.description == index + 1){
+        isAlreadyOnBoardState = true;
+        break
+      }
+    }
+
+    if(isAlreadyOnBoardState === false){
+      setBoardState((prevItems) => {
+        return [...prevItems, {
+          price_data: {
+            product_data: {
+              description: `${numberObj.value}`,
+              name: `Boleta #${numberObj.value} `,
+            },
+          currency: "usd",
+          unit_amount: raffle.price,
+          },
+          quantity: 1,
+        }]
+      });
+    }else{
+      setBoardState(boardState.filter(item => item.price_data.product_data.description != index + 1))
+    }
+    setNumbers((prevItems) => {
       const updatedItems = [...prevItems];
       const item = { ...updatedItems[index] };
       item.picked = !item.picked; 
@@ -30,9 +57,13 @@ export default function RaffleDetails() {
   };
 
   const totalPrice = (price) => {
-    let total = 0;
-    boardState.forEach(raffle => raffle.picked ? total += price : total)
+    let total = boardState.length * price
     return total
+  }
+
+  const handlePayment = async () => {
+      const response = await axios.post('http://localhost:4000/payment', boardState)
+      router.push(response.data.url)
   }
 
   useEffect(() => {
@@ -44,7 +75,7 @@ export default function RaffleDetails() {
 
     fetchData().then((rafflesAxios) => {
       setRaffle(rafflesAxios[0])
-      setBoardState(elements(rafflesAxios[0].numTickets))
+      setNumbers(elements(rafflesAxios[0].numTickets))
     })
   }, [])
 
@@ -59,7 +90,7 @@ export default function RaffleDetails() {
           <Board 
             numTickets={raffle.numTickets}
             toggle={toggle}
-            board={boardState}
+            numbers={numbers}
           />
           <div className={styles.right_bottom}>
               <h2>{raffle.numTickets} Boletas</h2>
@@ -70,7 +101,7 @@ export default function RaffleDetails() {
                 <h3>$ {totalPrice(raffle.price)}</h3>
                 : null
               }
-              <button>Comprar boletas</button>
+              <button onClick={handlePayment}>Comprar boletas</button>
           </div>
         </div>
         : 
