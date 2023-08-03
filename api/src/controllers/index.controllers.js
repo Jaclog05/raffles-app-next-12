@@ -7,7 +7,8 @@ const Stripe = require("stripe");
 require('dotenv').config()
 
 const {
-  STRIPE_SECRET_KEY
+  STRIPE_SECRET_KEY,
+  ADMIN_USER_ID
 } = process.env
 
 const stripe = new Stripe(STRIPE_SECRET_KEY);
@@ -26,9 +27,13 @@ controllers.getProfileInfo = (req, res) => {
     const {token} = req.cookies
     try {
         const user = verify(token, 'secret')
-        return res.json({email: user.email, username: user.username})
+        if(user.role === 'Admin'){
+            return res.json({admin: true, email: user.email, username: user.username})
+        }else{
+            return res.json({admin: false, email: user.email, username: user.username})
+        }
     } catch (error) {
-        return res.json(200).json({"error": "Token invalido"})
+        return res.status(200).json({"error": "Token invalido"})
     }
 }
 
@@ -70,21 +75,22 @@ controllers.loginUser = async (req, res) => {
 
             const token = sign(
                 {
-                exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
-                email: validUser.email,
-                username: validUser.name
-            },
-            "secret"
+                    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
+                    email: validUser.email,
+                    username: validUser.name,
+                    role: validUser._id == ADMIN_USER_ID ? "Admin" : "User"
+                },
+                "secret"
             )
 
         const serialized = serialize("token", token, 
-        {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
-            maxAge: 1000 * 60 * 60 * 24 *30,
-            path: "/"
-        } 
+            {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax',
+                maxAge: 1000 * 60 * 60 * 24 *30,
+                path: "/"
+            } 
         )
 
         res.setHeader("Set-Cookie", serialized)
@@ -123,7 +129,6 @@ controllers.getRaffleById = async (req, res) => {
     const raffleDetails = await Raffle.find({"_id": id})
     res.json(raffleDetails)
 }
-
 controllers.deleteRaffle = async (req, res) => {
     const {_id} = req.params
     const deletedRaffle = await Raffle.deleteOne({"_id": _id})
@@ -135,5 +140,4 @@ controllers.deleteUser = async (req, res) => {
     const deletedUser = await User.deleteOne({"_id": _id})
     res.json(deletedUser)
 }
-
 module.exports = controllers
