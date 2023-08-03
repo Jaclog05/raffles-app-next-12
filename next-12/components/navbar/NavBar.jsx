@@ -21,11 +21,17 @@ export default function NavBar({user, checkStatus}) {
       <Link href='/'><div>Raffles App</div></Link>
       {
       user ? 
-      <ul>
-        <Link href='/dashboard'><li>{user.username.split(" ")[0]}</li></Link>
-        <Link href='/createRaffle'><li>Nueva Rifa</li></Link>
-        <button className={styles.logoutButton} onClick={logout}>Cerrar Sesión</button>
-      </ul>
+        user.admin ? 
+          <ul>
+            <Link href='/dashboard'><li>{user.username.split(" ")[0]}</li></Link>
+            <Link href='/createRaffle'><li>Nueva Rifa</li></Link>
+            <button className={styles.logoutButton} onClick={logout}>Cerrar Sesión</button>
+          </ul>
+          :
+          <ul>
+            <Link href='/dashboard'><li>{user.username.split(" ")[0]}</li></Link>
+            <button className={styles.logoutButton} onClick={logout}>Cerrar Sesión</button>
+          </ul>
       :
       <ul>
         <Link className={styles.login} href='/login'>Ingresar</Link>

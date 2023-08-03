@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import styles from './dashboard.module.css'
-import { useRouter } from "next/router";
 
 function Dashboard() {
   const [user, setUser] = useState({
